@@ -6,8 +6,6 @@ class MoviePermission(BasePermission):
     def has_permission(self, request, view):
         if request.method in ['GET', 'HEAD', 'OPTIONS']:
             return True
-
-        # Проверяем, что пользователь является администратором
         return request.user and request.user.is_superuser
 
 
@@ -15,8 +13,6 @@ class CategoryPermission(BasePermission):
     def has_permission(self, request, view):
         if request.method in ['GET', 'HEAD', 'OPTIONS']:
             return True
-
-        # Проверяем, что пользователь является администратором
         return request.user and request.user.is_superuser
 
 
@@ -27,3 +23,12 @@ class IsAuthorOrAllowAny(permissions.BasePermission):
         elif request.user and request.user.is_authenticated:
             return True
         return False
+
+
+class AuthTokenPermission(permissions.BasePermission):
+
+    def has_permission(self, request, view):
+        if request.method == 'POST':
+            return True
+        elif request.user and request.user.is_authenticated:
+            return True
